@@ -3,10 +3,7 @@ from ipaddress import ip_network
 
 from ipify import get_ip
 
-from troposphere.iam import (
-    InstanceProfile,
-    PolicyType as IAMPolicy,
-    Role,
+from troposphere import (
     Base64,
     ec2,
     GetAtt,
@@ -15,6 +12,12 @@ from troposphere.iam import (
     Parameter,
     Ref,
     Template,
+)
+
+from troposphere.iam import (
+    InstanceProfile,
+    PolicyType as IAMPolicy,
+    Role,
 )
 
 from awacs.aws import (
@@ -30,8 +33,10 @@ from awacs.sts import AssumeRole
 ApplicationName = "jenkins"
 ApplicationPort = "8080"
 GithubAccount = "EffectiveDevOpsWithAWS"
-GithubAnsibleURL = "https://github.com/jaehlee3663/ansible".format(jaehlee3663)
+GithubAnsibleURL = "https://github.com/jaehlee3663/ansible".format(GithubAccount)
 AnsiblePullCmd = "/usr/local/ansible-pull -U https://github.com/jaehlee3663/ansible helloworld.yml -i localhost".format(GithubAnsibleURL, ApplicationName)
+
+PublicCidrIp = str(ip_network(get_ip()))
 
 t = Template()
 
@@ -52,7 +57,7 @@ t.add_resource(ec2.SecurityGroup(
             IpProtocol="tcp",
             FromPort="22",
             ToPort="22",
-            CidrIp="0.0.0.0/0",
+            CidrIp=PublicCidrIp,
         ),
         ec2.SecurityGroupRule(
             IpProtocol="tcp",
@@ -84,6 +89,12 @@ t.add_resource(Role(
         )
       ]
     )
+))
+
+t.add_resource(InstanceProfile(
+    "InstanceProfile",
+    Path="/",
+    Roles=[Ref("Role")]
 ))
 
 
