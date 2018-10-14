@@ -1,0 +1,35 @@
+---
+# tasks file for jenkins
+
+# Its OS is redhat based so we will install RPM package through yum. Below function is to bring GPG key to repository
+- name: Import Jenkins GPG key
+  rpm_key:
+    state: present
+    key: http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+
+# Next step is to import yum repository(/etc/yum.repos.d 에 있는 항목) into yum repository configuration.
+- name: Add Jenkins repository
+  yum_repository:
+    name: jenkins
+    description: jenkins repository
+    baseurl" http://pkg.jenkins.io/redhat
+    enabled: no
+    gpgcheck: yes
+
+# We will not basically use repository. It's for preventing from unexpected upgrading from external repository.
+# install Jenkins using yum
+- name: Install Jenkins
+  yum:
+    name: jenkins
+    enablerepo: jenkins
+    state: present
+
+# The default status of Jenkins repository is basically disenabled. So we need to manually enable it using enablerepo flag.
+- name: Start Jenkins
+  service:
+    name: jenkins
+    enabled: yes
+    state: started
+
+
+
