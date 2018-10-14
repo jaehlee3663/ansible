@@ -68,15 +68,16 @@ t.add_resource(ec2.SecurityGroup(
     ],
 ))
 
+
 ud = Base64(Join('\n', [
     "#!/bin/bash",
-    "yum remove java-1.7.0-openjdk -y",
-    "yum install java-1.8.0-openjdk -y",
     "yum install --enablerepo=epel -y git",
     "pip install ansible",
-      AnsiblePullCmd,
-      "echo '*/10 * * * * root {}' > /etc/cron.d/ansible-pull".format(AnsiblePullCmd)
+    AnsiblePullCmd,
+    "echo '*/10 * * * * {}' > /etc/cron.d/ansible-pull".format(AnsiblePullCmd)
 ]))
+
+
 
 t.add_resource(Role(
     "Role",

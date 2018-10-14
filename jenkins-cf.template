@@ -107,12 +107,10 @@
                             "\n",
                             [
                                 "#!/bin/bash",
-                                "yum remove java-1.7.0-openjdk -y",
-                                "yum install java-1.8.0-openjdk -y",
                                 "yum install --enablerepo=epel -y git",
                                 "pip install ansible",
                                 "/usr/local/ansible-pull -U https://github.com/jaehlee3663/ansible helloworld.yml -i localhost",
-                                "echo '*/10 * * * * root /usr/local/ansible-pull -U https://github.com/jaehlee3663/ansible helloworld.yml -i localhost' > /etc/cron.d/ansible-pull"
+                                "echo '*/10 * * * * /usr/local/ansible-pull -U https://github.com/jaehlee3663/ansible helloworld.yml -i localhost' > /etc/cron.d/ansible-pull"
                             ]
                         ]
                     }
