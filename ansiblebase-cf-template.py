@@ -18,7 +18,7 @@ from troposphere import (
 ApplicationName = "helloworld"
 ApplicationPort = "3000"
 GithubAccount = "EffectiveDevOpsWithAWS"
-GithubAnsibleURL = "https://github.com/jaehlee3663/ansible".format(jaehlee3663)
+GithubAnsibleURL = "https://github.com/jaehlee3663/ansible".format(GithubAccount)
 AnsiblePullCmd = "/usr/local/ansible-pull -U https://github.com/jaehlee3663/ansible helloworld.yml -i localhost".format(GithubAnsibleURL, ApplicationName)
 
 t = Template()
